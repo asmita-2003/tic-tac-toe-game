@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic Tac Toe</title>
     <style>
-        /* Global Styles */
         body {
             margin: 0;
             padding: 0;
@@ -17,6 +17,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            opacity: 3;
         }
 
         h2 {
@@ -117,13 +118,13 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Container for the game -->
     <div class="container">
         <!-- Title of the game -->
         <h2>TIC TAC TOE</h2>
         <h3>By Asmita (22BCM010)</h3>
-        
         <!-- Grid for the game -->
         <div class="grid">
             <!-- Cells for the Tic Tac Toe grid -->
@@ -137,7 +138,6 @@
             <div class="cell" id="cell-8" droppable="true"></div>
             <div class="cell" id="cell-9" droppable="true"></div>
         </div>
-        
         <!-- Draggable elements for X and O placed below the grid -->
         <div class="boxes-container">
             <!-- X boxes -->
@@ -146,7 +146,6 @@
             <div class="draggable x" draggable="true">X</div>
             <div class="draggable x" draggable="true">X</div>
             <div class="draggable x" draggable="true">X</div>
-            
             <!-- O boxes -->
             <div class="draggable o" draggable="true">O</div>
             <div class="draggable o" draggable="true">O</div>
@@ -163,35 +162,31 @@
 
         // Event listener for when a draggable element starts being dragged
         document.querySelectorAll('.draggable').forEach(box => {
-            box.addEventListener('dragstart', function(event) {
+            box.addEventListener('dragstart', function (event) {
                 draggedElement = event.target;
                 initialParent = draggedElement.parentNode;
             });
         });
 
         // Event listener for when a draggable element is dragged over another element
-        document.addEventListener('dragover', function(event) {
+        document.addEventListener('dragover', function (event) {
             event.preventDefault();
         });
 
         // Event listener for when a draggable element is dropped into a droppable area
         document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener('drop', function(event) {
+            cell.addEventListener('drop', function (event) {
                 event.preventDefault();
                 if (!cell.classList.contains('x') && !cell.classList.contains('o')) {
                     // Create a text node containing the X or O symbol
                     const symbol = draggedElement.textContent;
                     const textNode = document.createTextNode(symbol);
-                    
                     // Clear the contents of the cell before appending the new text node
                     cell.innerHTML = '';
-                    
                     // Append the text node to the cell
                     cell.appendChild(textNode);
-                    
                     // Disable dragging after dropping
                     draggedElement.draggable = false;
-                    
                     // Remove the box from its initial parent
                     initialParent.removeChild(draggedElement);
                 }
@@ -200,3 +195,19 @@
 
         // Reset the draggable attribute of all X and O boxes when the game is reset
         function resetGame() {
+            const xBoxes = document.querySelectorAll('.draggable.x');
+            const xBoxes = document.querySelectorAll('.draggable.x');
+            const oBoxes = document.querySelectorAll('.draggable.o');
+
+            xBoxes.forEach(box => {
+                box.draggable = true;
+            });
+
+            oBoxes.forEach(box => {
+                box.draggable = true;
+            });
+        }
+    </script>
+</body>
+
+</html>
