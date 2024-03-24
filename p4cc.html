@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        /* Global Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        h2 {
+            font-size: 5em;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Styling for the grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            grid-gap: 10px;
+            border: 5px solid #0b0c0e;
+            border-radius: 10px;
+            background-color: #000d18;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: #120574;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: relative;
+            border-radius: 10px;
+        }
+
+        /* Styling for the hover effect on cells */
+        .cell:hover {
+            background-color: #201575;
+        }
+
+        /* Styling for the indicator when dragging over a cell */
+        .cell:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Styling for the indicator when dragging over a cell */
+        .cell.dragover:after {
+            opacity: 0.5;
+        }
+
+        /* Styling for draggable elements */
+        .draggable {
+            width: 50px;
+            height: 50px;
+            font-size: 2em;
+            background-color: #033211;
+            border: 2px solid #151212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px;
+            cursor: grab;
+        }
+
+        /* Styling for the X element */
+        .draggable.x {
+            color: #f52811;
+        }
+
+        /* Styling for the O element */
+        .draggable.o {
+            color: #00ff00;
+        }
+
+        /* Styling for X and O boxes container */
+        .boxes-container {
+            display: flex;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Container for the game -->
+    <div class="container">
+        <!-- Title of the game -->
+        <h2>TIC TAC TOE</h2>
+        <h3>By Asmita (22BCM010)</h3>
+        
+        <!-- Grid for the game -->
+        <div class="grid">
+            <!-- Cells for the Tic Tac Toe grid -->
+            <div class="cell" id="cell-1" droppable="true"></div>
+            <div class="cell" id="cell-2" droppable="true"></div>
+            <div class="cell" id="cell-3" droppable="true"></div>
+            <div class="cell" id="cell-4" droppable="true"></div>
+            <div class="cell" id="cell-5" droppable="true"></div>
+            <div class="cell" id="cell-6" droppable="true"></div>
+            <div class="cell" id="cell-7" droppable="true"></div>
+            <div class="cell" id="cell-8" droppable="true"></div>
+            <div class="cell" id="cell-9" droppable="true"></div>
+        </div>
+        
+        <!-- Draggable elements for X and O placed below the grid -->
+        <div class="boxes-container">
+            <!-- X boxes -->
+            <div class="draggable x" draggable="true">X</div>
+            <div class="draggable x" draggable="true">X</div>
+            <div class="draggable x" draggable="true">X</div>
+            <div class="draggable x" draggable="true">X</div>
+            <div class="draggable x" draggable="true">X</div>
+            
+            <!-- O boxes -->
+            <div class="draggable o" draggable="true">O</div>
+            <div class="draggable o" draggable="true">O</div>
+            <div class="draggable o" draggable="true">O</div>
+            <div class="draggable o" draggable="true">O</div>
+        </div>
+    </div>
+
+    <!-- JavaScript for handling drag and drop functionality -->
+    <script>
+        // Define variables to store the dragged element and its initial parent
+        let draggedElement = null;
+        let initialParent = null;
+
+        // Event listener for when a draggable element starts being dragged
+        document.querySelectorAll('.draggable').forEach(box => {
+            box.addEventListener('dragstart', function(event) {
+                draggedElement = event.target;
+                initialParent = draggedElement.parentNode;
+            });
+        });
+
+        // Event listener for when a draggable element is dragged over another element
+        document.addEventListener('dragover', function(event) {
+            event.preventDefault();
+        });
+
+        // Event listener for when a draggable element is dropped into a droppable area
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('drop', function(event) {
+                event.preventDefault();
+                if (!cell.classList.contains('x') && !cell.classList.contains('o')) {
+                    // Create a text node containing the X or O symbol
+                    const symbol = draggedElement.textContent;
+                    const textNode = document.createTextNode(symbol);
+                    
+                    // Clear the contents of the cell before appending the new text node
+                    cell.innerHTML = '';
+                    
+                    // Append the text node to the cell
+                    cell.appendChild(textNode);
+                    
+                    // Disable dragging after dropping
+                    draggedElement.draggable = false;
+                    
+                    // Remove the box from its initial parent
+                    initialParent.removeChild(draggedElement);
+                }
+            });
+        });
+
+        // Reset the draggable attribute of all X and O boxes when the game is reset
+        function resetGame() {
